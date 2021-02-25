@@ -1,0 +1,63 @@
+&Global
+    seed=123456789,
+    total_turns=25000,
+    half_crossing_angle=<thetac=12.5e-3>,
+    output="nn_%d{nn}_ss_%d{ss}.gop",
+    output_turns=11
+&end
+
+&WeakBeam
+    n_macro=<1000000*nn>,
+    n_particle=0.6881e11,
+    energy=275e9,
+    mass=<pmass>,
+    charge=1.0,
+    transverse_size=95e-6,8.5e-6,
+    longitudinal_size=<sigz=6e-2>,<sigd=6.6e-4>,
+    beta=<bip=0.8>,<bipy=0.072>,
+    alpha=0.0,0.0
+&end
+
+&GaussianStrongBeam
+    charge=-1.0,
+    n_particle=1.7203e11,
+    beta=0.45,0.056,
+    alpha=0.0,0.0,
+    sizes=95e-6,8.5e-6,2e-2,
+    zslice=<ss>
+&end
+
+&CC2IP
+    betax=<bcc=1300.0>,<bip>,
+    alphax=0.0,0.0,
+    dphasex=<pi/2.0>
+&end
+
+&IP2CC
+    betax=<bip>,<bcc>,
+    alphax=0.0,0.0,
+    dphasex=<pi/2.0>
+&end
+
+&ThinCrabCavity_before_IP
+    frequency=200e6,
+    strength=<tan(thetac)/sqrt(bcc*bip)>,
+    phase=0.0,
+    harmonic=2,
+    relative_strength=0.0
+&end
+
+&ThinCrabCavity_after_IP
+    frequency=200e6,
+    strength=<tan(thetac)/sqrt(bcc*bip)>,
+    phase=0.0,
+    harmonic=2,
+    relative_strength=0.0
+&end
+
+&OneTurn
+    beta=<bip>,<bipy>,<sigz/sigd>,
+    alpha=0.0,0.0,
+    tune=0.355,0.193,0.01,
+    chromaticity=2.0,2.0
+&end
