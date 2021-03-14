@@ -1,7 +1,10 @@
 CC=mpic++
-oo=crab_cavity.o Lorentz_boost.o linear_map.o beam.o faddeeva.o erfinv.o beam_beam.o poisson_solver.o radiation.o
+oo=crab_cavity.o Lorentz_boost.o linear_map.o beam.o faddeeva.o erfinv.o beam_beam.o poisson_solver.o radiation.o Rotated_Lorentz_boost.o
 poo=../src/parser/bb_lex.o ../src/parser/bb_yacc.o ../src/parser/calc_lex.o ../src/parser/calc_yacc.o ../src/parser/fmt_lex.o ../src/parser/input.o
-target=weak_strong
+#target=weak_strong
+#target=soft_gaussian
+#target=test_rotated
+target=soft_gaussian_rotated
 .PHONY:parser_compile clean
 ${target}:${target}.o ${oo} parser_compile
 	${CC} -o ${target} ${target}.o ${oo} ${poo} -ltrng4
@@ -9,11 +12,11 @@ ${target}:${target}.o ${oo} parser_compile
 tune_scan2:tune_scan2.o gwofz.o gtrack.o ${oo} parser_compile
 	nvcc -dlink ${oo} ${poo} tune_scan.o gwofz.o gtrack.o -o link.o
 	${CC} -o tune_scan2 ${oo} ${poo} tune_scan2.o gwofz.o gtrack.o link.o -ltrng4 -lcudart -lcudadevrt
-	mv tune_scan2 ../bin/
+	mv tune_scan2 ../run/
 gpu_weak_strong:gpu_weak_strong.o gwofz.o gtrack.o ${oo} parser_compile
 	nvcc -dlink ${oo} ${poo} gpu_weak_strong.o gwofz.o gtrack.o -o link.o
 	${CC} -o gpu_weak_strong ${oo} ${poo} gpu_weak_strong.o gwofz.o gtrack.o link.o -ltrng4 -lcudart -lcudadevrt
-	mv gpu_weak_strong ../bin/
+	mv gpu_weak_strong ../run/
 gpu_weak_strong.o:../src/gpu_weak_strong.cpp 
 	${CC} -c -O3 ../src/gpu_weak_strong.cpp -std=c++17
 tune_scan2.o:../src/tune_scan2.cpp 
@@ -26,6 +29,8 @@ crab_cavity.o:../src/crab_cavity.cpp ../src/crab_cavity.h ../src/acc_base.h ../s
 	${CC} -c -O3 ../src/crab_cavity.cpp -std=c++17
 Lorentz_boost.o:../src/Lorentz_boost.cpp ../src/Lorentz_boost.h ../src/acc_base.h ../src/constants.h
 	${CC} -c -O3 ../src/Lorentz_boost.cpp -std=c++17
+Rotated_Lorentz_boost.o:../src/Rotated_Lorentz_boost.cpp ../src/Rotated_Lorentz_boost.h ../src/acc_base.h ../src/constants.h
+	${CC} -c -O3 ../src/Rotated_Lorentz_boost.cpp -std=c++17
 linear_map.o:../src/linear_map.cpp ../src/linear_map.h ../src/acc_base.h ../src/constants.h
 	${CC} -c -O3 ../src/linear_map.cpp -std=c++17
 beam.o:../src/beam.cpp ../src/beam.h ../src/acc_base.h ../src/faddeeva.h
